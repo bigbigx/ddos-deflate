@@ -1,5 +1,11 @@
 #!/bin/sh
 
+# Check if the script is executed as root
+if [ "$(id -u)" -ne 0 ]; then
+    echo "Please execute this script as root."
+    exit 1
+fi
+
 # Check for required dependencies
 if [ -f "/usr/bin/apt-get" ]; then
     install_type='2';
@@ -118,11 +124,11 @@ fi
 
 echo;
 
-if [ -d /usr/lib/systemd/system ]; then
+if [ -d /lib/systemd/system ]; then
     echo -n 'Setting up systemd service...'
-    mkdir -p "$DESTDIR/usr/lib/systemd/system/"
-    cp src/ddos.service "$DESTDIR/usr/lib/systemd/system/" > /dev/null 2>&1
-    chmod 0755 "$DESTDIR/usr/lib/systemd/system/ddos.service" > /dev/null 2>&1
+    mkdir -p "$DESTDIR/lib/systemd/system/"
+    cp src/ddos.service "$DESTDIR/lib/systemd/system/" > /dev/null 2>&1
+    chmod 0755 "$DESTDIR/lib/systemd/system/ddos.service" > /dev/null 2>&1
     echo " (done)"
 
     # Check if systemctl is installed and activate service
